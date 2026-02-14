@@ -1,0 +1,7 @@
+{
+  "keep_vars": true, // 每次构建不清楚运行时变量
+  "routes": [{ "pattern": "blog.example.com", "custom_domain": true }],
+  "d1_databases": [{ "binding": "DB", "database_id": "works", ... }],
+  "r2_buckets": [{ "binding": "BUCKET", "bucket_name": "images", ... }],
+  "kv_namespaces": [{ "binding": "KV", "id": "f3932593ce3c4b5c810d8d6aa6958ae4", ... }]
+}

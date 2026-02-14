@@ -1,7 +1,131 @@
 {
-  "keep_vars": true, // 每次构建不清楚运行时变量
-  "routes": [{ "pattern": "blog.example.com", "custom_domain": true }],
-  "d1_databases": [{ "binding": "DB", "database_id": "works", ... }],
-  "r2_buckets": [{ "binding": "BUCKET", "bucket_name": "images", ... }],
-  "kv_namespaces": [{ "binding": "KV", "id": "f3932593ce3c4b5c810d8d6aa6958ae4", ... }]
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "my-blog",
+  "compatibility_date": "2025-10-11",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "./src/server.ts",
+  "observability": {
+    "enabled": true,
+  },
+  "routes": [
+    {
+      "pattern": "carlos.cc.cd",
+      "custom_domain": true,
+    },
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_id": "works",
+      "migrations_dir": "migrations",
+      "remote": true,
+    },
+  ],
+  "r2_buckets": [
+    {
+      "bucket_name": "images",
+      "binding": "R2",
+      "remote": true,
+    },
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "KV",
+      "id": "f3932593ce3c4b5c810d8d6aa6958ae4",
+      "remote": true,
+    },
+  ],
+  "workflows": [
+    {
+      "name": "post-process-workflow",
+      "binding": "POST_PROCESS_WORKFLOW",
+      "class_name": "PostProcessWorkflow",
+    },
+    {
+      "name": "comment-moderation-workflow",
+      "binding": "COMMENT_MODERATION_WORKFLOW",
+      "class_name": "CommentModerationWorkflow",
+    },
+    {
+      "name": "scheduled-publish-workflow",
+      "binding": "SCHEDULED_PUBLISH_WORKFLOW",
+      "class_name": "ScheduledPublishWorkflow",
+    },
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "RATE_LIMITER",
+        "class_name": "RateLimiter",
+      },
+    ],
+  },
+  "ai": {
+    "binding": "AI",
+    "remote": true,
+  },
+  "queues": {
+    "producers": [{ "binding": "QUEUE", "queue": "blog-queue" }],
+    "consumers": [
+      {
+        "queue": "blog-queue",
+        "max_batch_size": 10,
+        "max_batch_timeout": 5,
+        "max_retries": 3,
+      },
+    ],
+  },
+  "migrations": [
+    {
+      "tag": "rate-limiter-v1",
+      "new_sqlite_classes": ["RateLimiter"],
+    },
+  ],
+  "env": {
+    "test": {
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "RATE_LIMITER",
+            "class_name": "RateLimiter",
+          },
+        ],
+      },
+      "kv_namespaces": [
+        {
+          "binding": "KV",
+        },
+      ],
+      "r2_buckets": [
+        {
+          "binding": "R2",
+        },
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+        },
+      ],
+      "workflows": [
+        {
+          "name": "post-process-workflow",
+          "binding": "POST_PROCESS_WORKFLOW",
+          "class_name": "PostProcessWorkflow",
+        },
+        {
+          "name": "comment-moderation-workflow",
+          "binding": "COMMENT_MODERATION_WORKFLOW",
+          "class_name": "CommentModerationWorkflow",
+        },
+        {
+          "name": "scheduled-publish-workflow",
+          "binding": "SCHEDULED_PUBLISH_WORKFLOW",
+          "class_name": "ScheduledPublishWorkflow",
+        },
+      ],
+      "queues": {
+        "producers": [{ "binding": "QUEUE", "queue": "blog-queue" }],
+      },
+    },
+  },
 }

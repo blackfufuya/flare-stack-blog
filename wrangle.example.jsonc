@@ -9,21 +9,21 @@
   },
   "routes": [
     {
-      "pattern": "carlos.cc.cd",
+      "pattern": "DOMAIN_PLACEHOLDER",
       "custom_domain": true,
     },
   ],
   "d1_databases": [
     {
       "binding": "DB",
-      "database_id": "works",
+      "database_id": "D1_DATABASE_ID",
       "migrations_dir": "migrations",
       "remote": true,
     },
   ],
   "r2_buckets": [
     {
-      "bucket_name": "images",
+      "bucket_name": "bucket-name-placeholder",
       "binding": "R2",
       "remote": true,
     },
@@ -31,7 +31,7 @@
   "kv_namespaces": [
     {
       "binding": "KV",
-      "id": "f3932593ce3c4b5c810d8d6aa6958ae4",
+      "id": "KV_NAMESPACE_ID",
       "remote": true,
     },
   ],
@@ -58,6 +58,10 @@
         "name": "RATE_LIMITER",
         "class_name": "RateLimiter",
       },
+      {
+        "name": "PASSWORD_HASHER",
+        "class_name": "PasswordHasher",
+      },
     ],
   },
   "ai": {
@@ -80,6 +84,10 @@
       "tag": "rate-limiter-v1",
       "new_sqlite_classes": ["RateLimiter"],
     },
+    {
+      "tag": "password-hasher-v1",
+      "new_sqlite_classes": ["PasswordHasher"],
+    },
   ],
   "env": {
     "test": {
@@ -88,6 +96,10 @@
           {
             "name": "RATE_LIMITER",
             "class_name": "RateLimiter",
+          },
+          {
+            "name": "PASSWORD_HASHER",
+            "class_name": "PasswordHasher",
           },
         ],
       },
